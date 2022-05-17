@@ -1,0 +1,829 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "activate",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "creator",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "clear",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "compapprove",
+            "base": "",
+            "fields": [
+                {
+                    "name": "comp_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "hash",
+                    "type": "checksum256"
+                }
+            ]
+        },
+        {
+            "name": "compdelete",
+            "base": "",
+            "fields": [
+                {
+                    "name": "comp_id",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "components",
+            "base": "",
+            "fields": [
+                {
+                    "name": "comp_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "src",
+                    "type": "string[]"
+                },
+                {
+                    "name": "hash",
+                    "type": "checksum256[]"
+                },
+                {
+                    "name": "info_json",
+                    "type": "string"
+                },
+                {
+                    "name": "approve_level",
+                    "type": "uint8"
+                },
+                {
+                    "name": "last_update",
+                    "type": "time_point_sec"
+                }
+            ]
+        },
+        {
+            "name": "compreg",
+            "base": "",
+            "fields": [
+                {
+                    "name": "owner",
+                    "type": "name"
+                },
+                {
+                    "name": "src",
+                    "type": "string"
+                },
+                {
+                    "name": "hash",
+                    "type": "checksum256"
+                },
+                {
+                    "name": "info_json",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "compunapprov",
+            "base": "",
+            "fields": [
+                {
+                    "name": "comp_id",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "compupdatein",
+            "base": "",
+            "fields": [
+                {
+                    "name": "comp_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "info_json",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "compupdatesr",
+            "base": "",
+            "fields": [
+                {
+                    "name": "comp_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "new_src",
+                    "type": "string"
+                },
+                {
+                    "name": "new_hash",
+                    "type": "checksum256"
+                }
+            ]
+        },
+        {
+            "name": "creategroup",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "creator",
+                    "type": "name"
+                },
+                {
+                    "name": "resource_estimation",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "deposits",
+            "base": "",
+            "fields": [
+                {
+                    "name": "balance",
+                    "type": "extended_asset"
+                }
+            ]
+        },
+        {
+            "name": "groupmeta",
+            "base": "",
+            "fields": [
+                {
+                    "name": "title",
+                    "type": "string"
+                },
+                {
+                    "name": "about",
+                    "type": "string"
+                },
+                {
+                    "name": "links",
+                    "type": "link[]"
+                }
+            ]
+        },
+        {
+            "name": "groups",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "creator",
+                    "type": "name"
+                },
+                {
+                    "name": "meta",
+                    "type": "groupmeta"
+                },
+                {
+                    "name": "ui",
+                    "type": "uiconf"
+                },
+                {
+                    "name": "state",
+                    "type": "uint8"
+                },
+                {
+                    "name": "tags",
+                    "type": "name[]"
+                },
+                {
+                    "name": "claps",
+                    "type": "uint64"
+                },
+                {
+                    "name": "r1",
+                    "type": "uint64"
+                },
+                {
+                    "name": "r2",
+                    "type": "uint64"
+                },
+                {
+                    "name": "r3",
+                    "type": "uint64"
+                },
+                {
+                    "name": "creation_date",
+                    "type": "time_point_sec"
+                }
+            ]
+        },
+        {
+            "name": "link",
+            "base": "",
+            "fields": [
+                {
+                    "name": "icon",
+                    "type": "string"
+                },
+                {
+                    "name": "label",
+                    "type": "string"
+                },
+                {
+                    "name": "url",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "linkgroup",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "creator",
+                    "type": "name"
+                },
+                {
+                    "name": "meta",
+                    "type": "groupmeta"
+                },
+                {
+                    "name": "ui",
+                    "type": "uiconf"
+                },
+                {
+                    "name": "state",
+                    "type": "uint8"
+                },
+                {
+                    "name": "tags",
+                    "type": "name[]"
+                },
+                {
+                    "name": "claps",
+                    "type": "uint64"
+                },
+                {
+                    "name": "creation_date",
+                    "type": "time_point_sec"
+                }
+            ]
+        },
+        {
+            "name": "messagebus",
+            "base": "",
+            "fields": [
+                {
+                    "name": "sender_group",
+                    "type": "name"
+                },
+                {
+                    "name": "event",
+                    "type": "name"
+                },
+                {
+                    "name": "message",
+                    "type": "string"
+                },
+                {
+                    "name": "receivers",
+                    "type": "name[]"
+                }
+            ]
+        },
+        {
+            "name": "migrategrps",
+            "base": "",
+            "fields": [
+                {
+                    "name": "batch",
+                    "type": "uint8"
+                },
+                {
+                    "name": "skip",
+                    "type": "uint8"
+                }
+            ]
+        },
+        {
+            "name": "movedeposit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "amount",
+                    "type": "extended_asset"
+                }
+            ]
+        },
+        {
+            "name": "opendeposit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "account",
+                    "type": "name"
+                },
+                {
+                    "name": "ram_payer",
+                    "type": "name"
+                },
+                {
+                    "name": "amount",
+                    "type": "extended_asset"
+                }
+            ]
+        },
+        {
+            "name": "setcustomui",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "url",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "setgrpstate",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "newstate",
+                    "type": "uint8"
+                }
+            ]
+        },
+        {
+            "name": "setsettings",
+            "base": "",
+            "fields": [
+                {
+                    "name": "new_settings",
+                    "type": "settings"
+                },
+                {
+                    "name": "remove",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "settings",
+            "base": "",
+            "fields": [
+                {
+                    "name": "system_token",
+                    "type": "extended_asset"
+                }
+            ]
+        },
+        {
+            "name": "state",
+            "base": "",
+            "fields": [
+                {
+                    "name": "comp_id",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "uiconf",
+            "base": "",
+            "fields": [
+                {
+                    "name": "logo",
+                    "type": "string"
+                },
+                {
+                    "name": "hexcolor",
+                    "type": "string"
+                },
+                {
+                    "name": "custom_ui_url",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "unlinkgroup",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "updateabout",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "about",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "updatecolor",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "hexcolor",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "updatelinks",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "newlinks",
+                    "type": "link[]"
+                }
+            ]
+        },
+        {
+            "name": "updatelogo",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "logo",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "updatetags",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "tags",
+                    "type": "name[]"
+                }
+            ]
+        },
+        {
+            "name": "updatetitle",
+            "base": "",
+            "fields": [
+                {
+                    "name": "groupname",
+                    "type": "name"
+                },
+                {
+                    "name": "title",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "versioning",
+            "base": "",
+            "fields": [
+                {
+                    "name": "modulename",
+                    "type": "name"
+                },
+                {
+                    "name": "codehash",
+                    "type": "checksum256"
+                },
+                {
+                    "name": "abihash",
+                    "type": "checksum256"
+                },
+                {
+                    "name": "json_src",
+                    "type": "string"
+                },
+                {
+                    "name": "info",
+                    "type": "string"
+                },
+                {
+                    "name": "update_key",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "versions",
+            "base": "",
+            "fields": [
+                {
+                    "name": "version",
+                    "type": "uint64"
+                },
+                {
+                    "name": "codehash",
+                    "type": "checksum256"
+                },
+                {
+                    "name": "abihash",
+                    "type": "checksum256"
+                },
+                {
+                    "name": "json_src",
+                    "type": "string"
+                },
+                {
+                    "name": "info",
+                    "type": "string"
+                },
+                {
+                    "name": "status",
+                    "type": "uint8"
+                },
+                {
+                    "name": "r2",
+                    "type": "uint64"
+                },
+                {
+                    "name": "creation_date",
+                    "type": "time_point_sec"
+                }
+            ]
+        },
+        {
+            "name": "versionstate",
+            "base": "",
+            "fields": [
+                {
+                    "name": "modulename",
+                    "type": "name"
+                },
+                {
+                    "name": "version",
+                    "type": "uint64"
+                },
+                {
+                    "name": "status",
+                    "type": "uint8"
+                }
+            ]
+        },
+        {
+            "name": "withdraw",
+            "base": "",
+            "fields": [
+                {
+                    "name": "account",
+                    "type": "name"
+                },
+                {
+                    "name": "amount",
+                    "type": "extended_asset"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "activate",
+            "type": "activate",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "clear",
+            "type": "clear",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "compapprove",
+            "type": "compapprove",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "compdelete",
+            "type": "compdelete",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "compreg",
+            "type": "compreg",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "compunapprov",
+            "type": "compunapprov",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "compupdatein",
+            "type": "compupdatein",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "compupdatesr",
+            "type": "compupdatesr",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "creategroup",
+            "type": "creategroup",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "linkgroup",
+            "type": "linkgroup",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "messagebus",
+            "type": "messagebus",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "migrategrps",
+            "type": "migrategrps",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "movedeposit",
+            "type": "movedeposit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "opendeposit",
+            "type": "opendeposit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setcustomui",
+            "type": "setcustomui",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setgrpstate",
+            "type": "setgrpstate",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setsettings",
+            "type": "setsettings",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "unlinkgroup",
+            "type": "unlinkgroup",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "updateabout",
+            "type": "updateabout",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "updatecolor",
+            "type": "updatecolor",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "updatelinks",
+            "type": "updatelinks",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "updatelogo",
+            "type": "updatelogo",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "updatetags",
+            "type": "updatetags",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "updatetitle",
+            "type": "updatetitle",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "versioning",
+            "type": "versioning",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "versionstate",
+            "type": "versionstate",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "withdraw",
+            "type": "withdraw",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "components",
+            "type": "components",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "deposits",
+            "type": "deposits",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "groups",
+            "type": "groups",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "settings",
+            "type": "settings",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "state",
+            "type": "state",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "versions",
+            "type": "versions",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}

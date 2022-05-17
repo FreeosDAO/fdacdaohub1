@@ -1,0 +1,267 @@
+Searching 16 files for "EOS"
+
+/home/andy/Work_Projects/dev/fdacdaohub1/deploy.sh:
+    1  #!/bin/bash
+    2  cd /home/andy/Work_Projects/dev/fdacdaohub1
+    3: cleos -u https://protontestnet.greymass.com set contract fdacdaohub1  /home/andy/Work_Projects/dev/fdacdaohub1/fdacdaohub1 fdacdaohub1.wasm fdacdaohub1.abi
+    4  
+    5  
+
+/home/andy/Work_Projects/dev/fdacdaohub1/fdacdaohub1.cpp:
+  235    //get_self is authorized to delete groups from the hub! The group will still exist though.
+  236    //however deleted groups can not be found via the ui. Direct links will still work.
+  237:   check(eosio::has_auth(groupname) || eosio::has_auth(get_self()), "Not authorized to unlink the group from the hub.");
+  238    groups_table _groups(get_self(), get_self().value);
+  239    auto group_itr = _groups.find(groupname.value);
+  ...
+  258  void fdacdaohub1::on_transfer(name from, name to, asset quantity, string memo){
+  259  
+  260:   if(get_first_receiver() != name("eosio.token") || quantity.symbol.code() != symbol_code("EOS") ){
+  261      return;
+  262    }
+  ...
+  265      return;
+  266    }
+  267:   if ( from == name("eosio") || from == name("eosio.bpay") ||
+  268:        from == name("eosio.msig") || from == name("eosio.names") ||
+  269:        from == name("eosio.prods") || from == name("eosio.ram") ||
+  270:        from == name("eosio.ramfee") || from == name("eosio.saving") ||
+  271:        from == name("eosio.stake") || from == name("eosio.token") ||
+  272:        from == name("eosio.unregd") || from == name("eosio.vpay") ||
+  273:        from == name("eosio.wrap") || from == name("eosio.rex") ) {
+  274      return;
+  275    }
+
+/home/andy/Work_Projects/dev/fdacdaohub1/fdacdaohub1.hpp:
+    1  #pragma once
+    2  
+    3: #include <eosio/eosio.hpp>
+    4: #include <eosio/system.hpp>
+    5: #include <eosio/action.hpp>
+    6: #include <eosio/asset.hpp>
+    7: #include <eosio/time.hpp>
+    8: #include <eosio/singleton.hpp>
+    9: #include <eosio/permission.hpp>
+   10: #include <eosio/multi_index.hpp>
+   11  
+   12  #include "json.hpp"
+   ..
+   15  
+   16  using namespace std;
+   17: using namespace eosio;
+   18  
+   19  CONTRACT fdacdaohub1 : public contract {
+   ..
+   43        extended_asset system_token;
+   44      };
+   45:     typedef eosio::singleton<"settings"_n, settings> settings_table;
+   46      
+   47      ACTION versioning(name modulename, checksum256 codehash, checksum256 abihash, string json_src, string info, uint64_t update_key);
+   ..
+   82      ACTION clear();
+   83      //notification handlers
+   84:     [[eosio::on_notify("*::transfer")]]
+   85      void on_transfer(name from, name to, asset quantity, string memo);
+   86  
+   ..
+   92          uint64_t comp_id = 100;
+   93      };
+   94:     typedef eosio::singleton<"state"_n, state> state_table;
+   95  
+   96  
+   ..
+  120      };
+  121      typedef multi_index<name("groups"), groups,
+  122:       eosio::indexed_by<"byclaps"_n, eosio::const_mem_fun<groups, uint64_t, &groups::by_claps >>,
+  123:       eosio::indexed_by<"bycreator"_n, eosio::const_mem_fun<groups, uint64_t, &groups::by_creator >>
+  124      > groups_table;
+  125      
+  ...
+  157      void add_deposit( const name& account, const extended_asset& value);
+  158      struct sort_authorization_by_name{
+  159:       inline bool operator() (const eosiosystem::permission_level_weight& plw1, const eosiosystem::permission_level_weight& plw2){
+  160          return (plw1.permission.actor < plw2.permission.actor);
+  161        }
+
+/home/andy/Work_Projects/dev/fdacdaohub1/functions.cpp:
+    5      settings s = _settings.get();
+    6      //pay for resources
+    7:     symbol xpr_sym = s.system_token.quantity.symbol;//   symbol(symbol_code("XPR"), 4); // changed eos to xpr
+    8      deposits_table _deposits(get_self(), creator.value);
+    9      auto deposit = _deposits.get(xpr_sym.raw(), "Account doesn't have XPR in deposits. Please transfer XPR to the hub to pay for RAM/NET/CPU." );
+   10      check(deposit.balance.quantity >= resource_estimation, "Not enough XPR deposited to pay for RAM/NET/CPU.");
+   11      asset ram_quantity = asset(deposit.balance.quantity.amount - 20000, xpr_sym);
+   12:     asset net_quantity = asset(10000, xpr_sym);  // changed eos_sym to xpr_sym
+   13:     asset cpu_quantity = asset(10000, xpr_sym);  // changed eos_sym to xpr_sym
+   14      bool transfer_bw = true;
+   15      sub_deposit(creator, deposit.balance);
+   16  
+   17      //construct setup authorities for the new group account
+   18:     vector<eosiosystem::permission_level_weight> owners;
+   19:     vector<eosiosystem::permission_level_weight> actives;
+   20  
+   21:     eosiosystem::permission_level_weight pml_self{
+   22          .permission = permission_level{get_self(), "active"_n},
+   23          .weight = (uint16_t) 1,
+   24      };
+   25  
+   26:     eosiosystem::permission_level_weight pml_code{
+   27:         .permission = permission_level{groupname, "eosio.code"_n },
+   28          .weight = (uint16_t) 1,
+   29      };
+   30  
+   31:     eosiosystem::permission_level_weight pml_creator{
+   32          .permission = permission_level{creator, "active"_n },
+   33          .weight = (uint16_t) 1,
+   ..
+   41      std::sort(owners.begin(), owners.end(), sort_authorization_by_name());
+   42      
+   43:     eosiosystem::authority setup_owner_authority{
+   44          .threshold = 1,
+   45          .accounts = owners
+   46      };
+   47  
+   48:     eosiosystem::authority setup_active_authority{
+   49          .threshold = 1,
+   50          .accounts = actives
+   ..
+   54      action(
+   55          permission_level{ get_self(), "active"_n },
+   56:         "eosio"_n,
+   57          "newaccount"_n,
+   58          std::make_tuple(get_self(), groupname, setup_owner_authority, setup_active_authority )
+   ..
+   61      action(
+   62          permission_level{ get_self(), "active"_n },
+   63:         "eosio"_n,
+   64          "delegatebw"_n,
+   65          std::make_tuple(get_self(), groupname, net_quantity, cpu_quantity, transfer_bw )
+   ..
+   68      action(
+   69          permission_level{ get_self(), "active"_n },
+   70:         "eosio"_n,
+   71          "buyram"_n,
+   72          std::make_tuple(get_self(), groupname, ram_quantity )
+
+/home/andy/Work_Projects/dev/fdacdaohub1/Mycli.txt:
+   16  
+   17  
+   18: eosio-cpp -abigen freeossurvey.cpp -o=depl_freeossurvey/freeossurvey/freeossurvey.wasm -I=incl_freeossurvey
+   19: eosio-cpp -abigen freeossurvey.cpp -o=depl_freeossurvey/freeossurvey/freeossurvey.wasm -I.
+   20  
+   21: proton1 set contract freeosgov /home/andyb/project_dev/dev_env/freegovdev-main/depl_freegovdev/freegovdev -p freeosgov
+   22: cleos -u https://protontestnet.greymass.com set contract freeosgov /home/andyb/project_dev/dev_env/freeosgov-main freeosgov.wasm freeosgov.abi
+   23  
+   24: /home/andyb/freeosgov/freeosgov/depl_freeossurvey/freeossurvey
+   25  
+   26  THIS ONE
+   27: cleos -u https://protontestnet.greymass.com set contract freeosgovdev /home/andyb/project_dev/dev_env/freeosgov-main freeosgovdev.wasm freeosgovdev.abi
+   28: cleos -u https://protontestnet.greymass.com set contract freeosdiv5 /home/andy/devel_allocate/dividenda dividenda.wasm dividenda.abi
+   29  
+   30  
+   ..
+   32  
+   33  password: Unlocked: govevents
+   34: andyb@andyb:~/project_dev/dev_env/freeosgov-main$ cleos -u https://protontestnet.greymass.com set contract freeosgovdev /home/andyb/project_dev/dev_env/freeosgov-main freeosgov.wasm freeosgov.abi
+   35: Reading WASM from /home/andyb/project_dev/dev_env/freeosgov-main/freeosgov.wasm...
+   36  Publishing contract...
+   37  executed transaction: e2c21fb315b5afe8f93143bb2b3d56766ffbe220f04be04a28461c6d917fee60  37760 bytes  11231 us
+   38: #         eosio <= eosio::setcode               {"account":"freeosgovdev","vmtype":0,"vmversion":0,"code":"0061736d010000000185022660000060037f7f7f0...
+   39: #         eosio <= eosio::setabi                {"account":"freeosgovdev","abi":"0e656f73696f3a3a6162692f312e310027076163636f756e7400010762616c616e6...
+   40  warning: transaction executed locally, but may not be confirmed by the network yetult         ] 
+   41: andyb@andyb:~/project_dev/dev_env/freeosgov-main$ 
+   42  
+   43  
+   44  
+   45: cleos -u https://proton-testnet.eoscafeblock.com push transaction '{
+   46    "delay_sec": 0,
+   47    "max_cpu_usage_ms": 0,
+   48    "actions": [
+   49      {
+   50:       "account": "freeosgovdev",
+   51        "name": "fakereceiver",
+   52        "data": {
+   ..
+   57        "authorization": [
+   58          {
+   59:           "actor": "freeosgovdev",
+   60            "permission": "active"
+   61          }
+   ..
+   89  
+   90  Failed to deserialize variant
+   91: andyb@andyb:~/project_dev/dev_env/freeosgov-main$ cleos -u https://proton-testnet.eoscafeblock.com push transaction '{ 
+   92    "delay_sec": 0,
+   93    "max_cpu_usage_ms": 0,
+   94    "actions": [
+   95      {
+   96:       "account": "freeosgovdev",
+   97        "name": "fakereceiver",
+   98        "data": {
+   ..
+  103        "authorization": [
+  104          {
+  105:           "actor": "freeosgovdev",
+  106            "permission": "active"
+  107          }
+  ...
+  167  
+  168  
+  169: cleos -u https://protontestnet.greymass.com push transaction '{
+  170    "delay_sec": 0,
+  171    "max_cpu_usage_ms": 0,
+  172    "actions": [
+  173      {
+  174:       "account": "freeosgovdev",
+  175        "name": "freceiver",
+  176        "data": {
+  ...
+  181        "authorization": [
+  182          {
+  183:           "actor": "freeosgovdev",
+  184            "permission": "active"
+  185          }
+
+/home/andy/Work_Projects/dev/fdacdaohub1/Mycompile.sh:
+    1: eosio-cpp -o fdacdaohub1.wasm fdacdaohub1.cpp --abigen
+    2  
+
+/home/andy/Work_Projects/dev/fdacdaohub1/Mydeploy.sh:
+    1: cleos -u https://protontestnet.greymass.com set contract fdacdaohub1  /home/andy/Work_Projects/dev/fdacdaohub1/fdacdaohub1 fdacdaohub1.wasm fdacdaohub1.abi
+    2  
+    3  /home/andy/Work_Projects/dev/fdacdaohub1/fdacdaohub1
+
+/home/andy/Work_Projects/dev/fdacdaohub1/READMD.md:
+    1  # daclifyhub
+    2  
+    3: This example is to demonstrate a basic EOSIO smart contract, including
+    4  
+    5  - Define contract actions
+
+/home/andy/Work_Projects/dev/fdacdaohub1/system_structs.hpp:
+    1  
+    2: namespace eosiosystem {
+    3  
+    4      struct key_weight {
+    5:         eosio::public_key key;
+    6          uint16_t weight;
+    7:         EOSLIB_SERIALIZE( key_weight, (key)(weight) )
+    8      };
+    9  
+   10      struct permission_level_weight {
+   11:         eosio::permission_level permission;
+   12          uint16_t weight;
+   13      };
+
+/home/andy/Work_Projects/dev/fdacdaohub1/fdacdaohub1/fdacdaohub1.abi:
+    1  {
+    2:     "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    3:     "version": "eosio::abi/1.1",
+    4      "types": [],
+    5      "structs": [
+
+/home/andy/Work_Projects/dev/fdacdaohub1/fdacdaohub1/fdacdaohub1.wasm:
+    <binary>
+
+134 matches across 11 files
+
